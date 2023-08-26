@@ -36,6 +36,7 @@ import { ref, computed, reactive, watch } from 'vue';
 import type { FormInst, FormItemRule } from 'naive-ui';
 import { genderOptions, userStatusOptions } from '@/constants';
 import { formRules, createRequiredFormRule } from '@/utils';
+import { addUser, updateUser } from '~/src/service';
 
 export interface Props {
   /** 弹窗可见性 */
@@ -61,6 +62,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 interface Emits {
   (e: 'update:visible', visible: boolean): void;
+  (e: 'after-close'): void;
 }
 
 const emit = defineEmits<Emits>();
@@ -133,8 +135,19 @@ function handleUpdateFormModelByModalType() {
 
 async function handleSubmit() {
   await formRef.value?.validate();
-  window.$message?.success('新增成功!');
-  closeModal();
+  if (props.editData?.id) {
+    updateUser({ ...formModel, id: props.editData.id }).then(res => {
+      window.$message?.success(res.data as string);
+      closeModal();
+      emit('after-close');
+    });
+  } else {
+    addUser({ ...formModel, id: '' }).then(res => {
+      window.$message?.success(res.data as string);
+      closeModal();
+      emit('after-close');
+    });
+  }
 }
 
 watch(

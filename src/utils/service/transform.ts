@@ -12,7 +12,7 @@ export async function transformRequestData(requestData: any, contentType?: Union
   let data = requestData;
   // form类型转换
   if (contentType === 'application/x-www-form-urlencoded') {
-    data = stringify(requestData);
+    data = stringify(requestData, { indices: false });
   }
   // form-data类型转换
   if (contentType === 'multipart/form-data') {

@@ -30,45 +30,46 @@
           :data="tableData"
           :loading="loading"
           :pagination="pagination"
+          :row-key="rowData => rowData.id"
           flex-height
           class="flex-1-hidden"
         />
-        <table-action-modal v-model:visible="visible" :type="modalType" :edit-data="editData" />
+        <table-action-modal
+          v-model:visible="visible"
+          :type="modalType"
+          :edit-data="editData"
+          @after-close="getTableData"
+        />
       </div>
     </n-card>
   </div>
 </template>
 
 <script setup lang="tsx">
-import { reactive, ref } from 'vue';
+import { ref } from 'vue';
 import type { Ref } from 'vue';
 import { NButton, NPopconfirm, NSpace, NTag } from 'naive-ui';
-import type { DataTableColumns, PaginationProps } from 'naive-ui';
+import type { DataTableColumns } from 'naive-ui';
 import { genderLabels, userStatusLabels } from '@/constants';
-import { fetchUserList } from '@/service';
-import { useBoolean, useLoading } from '@/hooks';
+import { pageUser, removeUser } from '@/service';
+import { useBoolean } from '@/hooks';
+import useTable from '@/hooks/business/use-custom-table';
 import TableActionModal from './components/table-action-modal.vue';
 import type { ModalType } from './components/table-action-modal.vue';
 import ColumnSetting from './components/column-setting.vue';
 
-const { loading, startLoading, endLoading } = useLoading(false);
+const {
+  pageData: tableData,
+  pagination,
+  loading,
+  getTableData
+} = useTable<UserManagement.User>(pageUser, record => ({
+  ...record,
+  userName: record.username,
+  userStatus: record.status
+}));
+
 const { bool: visible, setTrue: openModal } = useBoolean();
-
-const tableData = ref<UserManagement.User[]>([]);
-function setTableData(data: UserManagement.User[]) {
-  tableData.value = data;
-}
-
-async function getTableData() {
-  startLoading();
-  const { data } = await fetchUserList();
-  if (data) {
-    setTimeout(() => {
-      setTableData(data);
-      endLoading();
-    }, 1000);
-  }
-}
 
 const columns: Ref<DataTableColumns<UserManagement.User>> = ref([
   {
@@ -78,7 +79,10 @@ const columns: Ref<DataTableColumns<UserManagement.User>> = ref([
   {
     key: 'index',
     title: '序号',
-    align: 'center'
+    align: 'center',
+    render: (_, idx) => {
+      return <span>{idx + 1}</span>;
+    }
   },
   {
     key: 'userName',
@@ -175,7 +179,7 @@ function handleAddTable() {
 }
 
 function handleEditTable(rowId: string) {
-  const findItem = tableData.value.find(item => item.id === rowId);
+  const findItem = tableData.value?.find(item => item.id === rowId);
   if (findItem) {
     setEditData(findItem);
   }
@@ -184,22 +188,11 @@ function handleEditTable(rowId: string) {
 }
 
 function handleDeleteTable(rowId: string) {
-  window.$message?.info(`点击了删除，rowId为${rowId}`);
+  removeUser([rowId]).then(res => {
+    window.$message?.info(res.data as string);
+    getTableData();
+  });
 }
-
-const pagination: PaginationProps = reactive({
-  page: 1,
-  pageSize: 10,
-  showSizePicker: true,
-  pageSizes: [10, 15, 20, 25, 30],
-  onChange: (page: number) => {
-    pagination.page = page;
-  },
-  onUpdatePageSize: (pageSize: number) => {
-    pagination.pageSize = pageSize;
-    pagination.page = 1;
-  }
-});
 
 function init() {
   getTableData();
