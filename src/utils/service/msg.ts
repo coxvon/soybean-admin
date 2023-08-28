@@ -1,5 +1,6 @@
 import { ERROR_MSG_DURATION, NO_ERROR_MSG_CODE } from '@/config';
-
+import { useRouterPush } from '@/composables';
+import { clearAuthStorage } from '@/store/modules/auth/helpers';
 /** 错误消息栈，防止同一错误同时出现 */
 const errorMsgStack = new Map<string | number, string>([]);
 
@@ -25,5 +26,10 @@ export function showErrorMsg(error: Service.RequestError) {
   window.$message?.error(error.msg, { duration: ERROR_MSG_DURATION });
   setTimeout(() => {
     removeErrorMsg(error);
+    if (error.code === 401) {
+      const { toLogin } = useRouterPush(false);
+      clearAuthStorage();
+      toLogin();
+    }
   }, ERROR_MSG_DURATION);
 }

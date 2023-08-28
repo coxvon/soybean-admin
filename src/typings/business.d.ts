@@ -19,6 +19,27 @@ declare namespace Auth {
   }
 }
 
+declare namespace SystemManagement {
+  interface Menu {
+    id: string;
+    name: string;
+    path: string;
+    title: string;
+    orderNo: number;
+    parentId: string;
+    component: string;
+    icon: string;
+    isLeaf: boolean;
+    children?: any[];
+    keepAlive: boolean;
+    singleLayout: string;
+    requiresAuth: boolean;
+    href?: string;
+    localIcon?: string;
+    i18nTitle?: string;
+  }
+}
+
 declare namespace UserManagement {
   interface User extends ApiUserManagement.User {
     /** 序号 */

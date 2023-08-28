@@ -23,3 +23,20 @@ export const removeUser = async (idArr: string[]) => {
 export const pageUser = async (params: any) => {
   return requestX.get<ApiUserManagement.User[] | null>('user/page', { params });
 };
+/** 菜单相关 */
+
+export const listMenu = async () => {
+  return requestX.get<SystemManagement.Menu[]>('menu/list');
+};
+
+export const addMenu = async (params: SystemManagement.Menu) => {
+  return requestX.post<string>('menu/add', params);
+};
+
+export const updateMenu = async (params: SystemManagement.Menu) => {
+  return requestX.post<string>('menu/update', params);
+};
+
+export const removeMenu = async (id: string) => {
+  return requestX.post<string>('menu/remove', { id });
+};
