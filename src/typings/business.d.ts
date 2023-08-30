@@ -18,6 +18,10 @@ declare namespace Auth {
     userRole: RoleType;
   }
 }
+interface Enum {
+  code: string;
+  value: string;
+}
 
 declare namespace SystemManagement {
   interface Menu {
@@ -38,12 +42,21 @@ declare namespace SystemManagement {
     localIcon?: string;
     i18nTitle?: string;
   }
+  interface Role<T> {
+    id: string;
+    name: string;
+    code: string;
+    status: T;
+    description: string;
+  }
 }
 
 declare namespace UserManagement {
   interface User extends ApiUserManagement.User {
     /** 序号 */
     index: number;
+    name?: string;
+    username?: string;
     /** 表格的key（id） */
     key: string;
   }

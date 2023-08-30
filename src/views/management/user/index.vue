@@ -27,7 +27,7 @@
         </n-space>
         <n-data-table
           :columns="columns"
-          :data="tableData"
+          :data="data"
           :loading="loading"
           :pagination="pagination"
           :row-key="rowData => rowData.id"
@@ -58,12 +58,7 @@ import TableActionModal from './components/table-action-modal.vue';
 import type { ModalType } from './components/table-action-modal.vue';
 import ColumnSetting from './components/column-setting.vue';
 
-const {
-  pageData: tableData,
-  pagination,
-  loading,
-  getTableData
-} = useTable<UserManagement.User>(pageUser, record => ({
+const { data, pagination, loading, getTableData } = useTable<UserManagement.User>(pageUser, record => ({
   ...record,
   userName: record.username,
   userStatus: record.status
@@ -169,8 +164,8 @@ function setModalType(type: ModalType) {
 
 const editData = ref<UserManagement.User | null>(null);
 
-function setEditData(data: UserManagement.User | null) {
-  editData.value = data;
+function setEditData(source: UserManagement.User | null) {
+  editData.value = source;
 }
 
 function handleAddTable() {
@@ -179,7 +174,7 @@ function handleAddTable() {
 }
 
 function handleEditTable(rowId: string) {
-  const findItem = tableData.value?.find(item => item.id === rowId);
+  const findItem = data.value?.find(item => item.id === rowId);
   if (findItem) {
     setEditData(findItem);
   }

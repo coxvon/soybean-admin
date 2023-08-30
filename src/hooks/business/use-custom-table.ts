@@ -8,9 +8,9 @@ export default <T>(
   transform?: (record: any) => T,
   pageConfig: PaginationProps = {}
 ): {
-  pageData: Ref<T[] | undefined>;
+  data: Ref<T[] | undefined>;
   pagination: any;
-  setPageData: (fullData: any) => void;
+  setData: (fullData: any) => void;
   loading: Ref<boolean>;
   startLoading: () => void;
   endLoading: () => void;
@@ -39,7 +39,7 @@ export default <T>(
   }) as PaginationProps;
   const data = ref<T[]>();
 
-  const setPageData = (fullData: any) => {
+  const setData = (fullData: any) => {
     if (fullData?.records) {
       if (transform) {
         data.value = fullData?.records.map(transform);
@@ -58,15 +58,15 @@ export default <T>(
 
     request({ pageNumber: pagination.page, pageSize: pagination.pageSize, ...params.value }).then(
       ({ data: result }) => {
-        setPageData(result);
+        setData(result);
         endLoading();
       }
     );
   }
   return {
-    pageData: data,
+    data,
     pagination,
-    setPageData,
+    setData,
     loading,
     startLoading,
     endLoading,
