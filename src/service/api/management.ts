@@ -75,3 +75,6 @@ export const addUserMapping = async (roleId: string, userIds: string[]) => {
 export const addMenuMapping = async (roleId: string, menuIds: string[], markIds: string[]) => {
   return requestX.post<string>('role/addMenuMappings', { roleId, menuIds, markIds });
 };
+export const listCmd = async () => {
+  return requestX.get<any[]>('role/listCmdInfo');
+};

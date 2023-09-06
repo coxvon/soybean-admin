@@ -1,7 +1,7 @@
 <template>
   <n-drawer v-model:show="drawerActive" :width="600">
     <n-drawer-content>
-      <template #header>菜单绑定</template>
+      <template #header>命令绑定</template>
       <template #footer>
         <n-space class="w-full pt-16px" :size="24" justify="end">
           <n-button @click="close">取消</n-button>
@@ -29,7 +29,6 @@
             :render-label="handleRenderLabel"
             :filter="handleFilter"
             @update:checked-keys="handleUpdateCheckedKeys"
-            @update:indeterminate-keys="handleIndeterminate"
           />
         </n-spin>
       </n-card>
@@ -41,7 +40,7 @@ import { ref, computed, watch } from 'vue';
 import type { TreeOption } from 'naive-ui';
 import { NTree, NButton, NSpace } from 'naive-ui';
 import { zip, catchError, map } from 'rxjs';
-import { listMenu, addMenuMapping, listMenuMapping } from '@/service';
+import { listCmd } from '@/service';
 import { useLoading } from '@/hooks';
 defineOptions({ name: 'RoleUserModal' });
 const props = withDefaults(defineProps<{ active: boolean; roleId: string }>(), {
@@ -61,7 +60,6 @@ const drawerActive = computed<boolean>({
   }
 });
 const value = ref<string[]>([]);
-const mark = ref<string[]>([]);
 const treeRef = ref();
 const options = ref<TreeOption[]>();
 const { loading, startLoading, endLoading } = useLoading();
@@ -70,47 +68,36 @@ const pattern = ref<string>();
 const close = () => {
   drawerActive.value = false;
   value.value = [];
-  mark.value = [];
   options.value = [];
   pattern.value = '';
 };
 const handleSubmit = () => {
   startLoading();
   const checkedData = treeRef.value.getCheckedData();
-  const indeterminateData = treeRef.value.getIndeterminateData();
   const checkedArr: string[] = [];
-  const indeterminateArr: string[] = [];
   // 过滤无效节点
   for (const idx in checkedData.keys) {
     if (checkedData.options[idx]) {
       checkedArr.push(checkedData.keys[idx]);
     }
   }
-  for (const idx in indeterminateData.keys) {
-    if (indeterminateData.options[idx]) {
-      indeterminateArr.push(indeterminateData.keys[idx]);
-    }
-  }
-  addMenuMapping(props.roleId, checkedArr, indeterminateArr)
+  /* addMenuMapping(props.roleId, checkedArr, indeterminateArr)
     .then(({ error, data }) => {
       if (!error) {
         value.value = [];
         close();
-        window.$message?.info(data);
+				window.$message?.info(data);
       }
     })
-    .finally(() => endLoading());
+    .finally(() => endLoading()); */
 };
 
 const handleRenderLabel = ({ option }: any) => {
-  return `${option.title} :: ${option.name}`;
+  return `${option.code} :: ${option.name}`;
 };
 
 const handleUpdateCheckedKeys = (keys: string[]) => {
   value.value = keys;
-};
-const handleIndeterminate = (keys: string[]) => {
-  mark.value = keys;
 };
 
 const handleFilter = (str: string, option: TreeOption) => {
@@ -118,25 +105,25 @@ const handleFilter = (str: string, option: TreeOption) => {
     return true;
   }
   const roleMenu = option as any;
-  const label = (roleMenu.title ? `${roleMenu.title} :: ` : '') + roleMenu.name;
+  const label = (roleMenu.code ? `${roleMenu.code} :: ` : '') + roleMenu.name;
   return label.includes(str);
 };
 
 const loadData = () => {
   startLoading();
-  zip(listMenu(), listMenuMapping(props.roleId))
+  zip(listCmd() /* , listMenuMapping(props.roleId) */)
     .pipe(
       map(
-        ([{ data }, { data: roleMenus }]: [
-          Service.RequestResult<SystemManagement.Menu[]>,
-          Service.RequestResult<any[]>
+        ([{ data } /* , { data: roleMenus } */]: [
+          Service.RequestResult<any[]> /* ,
+          Service.RequestResult<any[]> */
         ]) => {
           if (data) {
             options.value = data as unknown as TreeOption[];
           }
-          if (roleMenus) {
+          /* if (roleMenus) {
             value.value = roleMenus.map(m => m.menuId);
-          }
+          } */
         }
       ),
       catchError(() => {

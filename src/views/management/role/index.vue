@@ -50,6 +50,7 @@
     </n-modal>
     <role-user-modal v-model:visible="userVisible" :role-id="currentId"></role-user-modal>
     <role-menu-drawer v-model:active="menuActive" :role-id="currentId"></role-menu-drawer>
+    <role-cmd-drawer v-model:active="cmdActive" :role-id="currentId"></role-cmd-drawer>
   </div>
 </template>
 
@@ -64,6 +65,7 @@ import useTable from '@/hooks/business/use-custom-table';
 import TipIcon from '~/src/components/custom/tip-icon.vue';
 import RoleUserModal from './components/role-user-modal.vue';
 import RoleMenuDrawer from './components/role-menu-drawer.vue';
+import roleCmdDrawer from './components/role-cmd-drawer.vue';
 
 const { data, pagination, loading, getTableData } = useTable<SystemManagement.Role<Enum>>(pageRole);
 const statusOptions: { value: number; label: string }[] = [
@@ -81,6 +83,7 @@ const formRef = ref();
 const { bool: visible, setTrue: show, setFalse: close } = useBoolean(false);
 const { bool: userVisible, setTrue: showUser } = useBoolean(false);
 const { bool: menuActive, setTrue: showMenu } = useBoolean(false);
+const { bool: cmdActive, setTrue: showCmd } = useBoolean(false);
 const isAdd = ref<boolean>(true);
 const rules: FormRules = {
   code: createRequiredFormRule('请输入角色编码'),
@@ -171,6 +174,15 @@ const columns: DataTableColumns<SystemManagement.Role<Enum>> = [
           }}
         >
           菜单绑定
+        </TipIcon>
+        <TipIcon
+          icon="mdi:link-box-variant"
+          onClick={() => {
+            currentId.value = row.id;
+            showCmd();
+          }}
+        >
+          命令绑定
         </TipIcon>
         <TipIcon
           icon="mdi:delete-alert"
