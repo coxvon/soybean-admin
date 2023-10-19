@@ -34,6 +34,7 @@ import { useRouter } from 'vue-router';
 import { onKeyStroke, useDebounceFn } from '@vueuse/core';
 import { useRouteStore } from '@/store';
 import { useBasicLayout } from '@/composables';
+import { $t } from '@/locales';
 import SearchResult from './search-result.vue';
 import SearchFooter from './search-footer.vue';
 
@@ -82,14 +83,12 @@ watch(show, async val => {
 
 /** 查询 */
 function search() {
-  resultOptions.value = routeStore.searchMenus.filter(
-    menu => keyword.value && menu.meta?.title.toLocaleLowerCase().includes(keyword.value.toLocaleLowerCase().trim())
-  );
-  if (resultOptions.value?.length > 0) {
-    activePath.value = resultOptions.value[0].path;
-  } else {
-    activePath.value = '';
-  }
+  resultOptions.value = routeStore.searchMenus.filter(menu => {
+    const trimKeyword = keyword.value.toLocaleLowerCase().trim();
+    const title = (menu.meta.i18nTitle ? $t(menu.meta.i18nTitle) : menu.meta.title).toLocaleLowerCase();
+    return trimKeyword && title.includes(trimKeyword);
+  });
+  activePath.value = resultOptions.value[0]?.path ?? '';
 }
 
 function handleClose() {
