@@ -5,25 +5,24 @@
 
 [![license](https://img.shields.io/badge/license-MIT-green.svg)](./LICENSE) ![](https://img.shields.io/github/stars/honghuangdc/soybean-admin) ![](https://img.shields.io/github/forks/honghuangdc/soybean-admin)
 
-## 注意
+## 注意 SoybeanAdmin 正在重构，全新 1.0 预计12月份期间发布
 
-Soybean Admin 正在重构，重构后的版本为v1.0，变更点如下:
+Soybean Admin v1.0 :
 
-- 采用基于 pnpm 的 monorepo 管理项目
-- 第三方 soybeanjs 的工具库直接抽离到项目中(ElegantRouter除外)，不再作为依赖
-- 采用全新的路由插件 [ElegantRouter](https://github.com/soybeanjs/elegant-router)
-- 使用基于 [ApiFox](https://apifox.com/) 的远程 mock 代替本地 mock
-- 基于现有路由插件迁移至新路由插件的指南
-- 代码实现遵循 SoybeanJS 的代码规范
-- 项目的 main 分支保留系统核心部分，示例页面和无关核心的插件移至 example 分支
-- 完整 1.0 版本的文档
+- [x] 采用基于 pnpm 的 monorepo 管理项目
+- [x] 第三方 soybeanjs 的工具库直接抽离到项目中(ElegantRouter除外)，不再作为依赖
+- [x] 采用全新的路由插件 ElegantRouter
+- [x] 使用基于 ApiFox 的远程 mock 代替本地 mock
+- [x] 基于现有路由插件迁移至新路由插件的指南
+- [x] 代码实现遵循 SoybeanJS 的代码规范
+- [ ] 项目的 main 分支保留系统核心部分，示例页面和无关核心的插件移至 example 分支
+- [ ] 完整 1.0 版本的文档
 
-> 1.0版本仍然采用 NaiveUI
+  1.0 源代码：[v1.0-beta](https://github.com/honghuangdc/soybean-admin/tree/v1.0-beta)
 
 > 同时推出需要商业授权的 AntDesignVue 版本 和 ElementPlus 版本
 
-AntDesignVue版本进度 90%
-[预览地址](https://antd.soybeanjs.cn/)
+
 
 ## 简介
 
