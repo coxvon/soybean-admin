@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import { createReusableTemplate } from '@vueuse/core';
 import { SimpleScrollbar } from '@sa/materials';
-import { transformColorWithOpacity } from '@sa/utils';
+import { transformColorWithOpacity } from '@sa/color';
 import { useAppStore } from '@/store/modules/app';
 import { useRouteStore } from '@/store/modules/route';
 import { useThemeStore } from '@/store/modules/theme';
@@ -92,6 +92,7 @@ function handleClickMixMenu(menu: App.Global.Menu) {
     <MenuToggler
       arrow-icon
       :collapsed="appStore.siderCollapse"
+      :z-index="99"
       :class="{ 'text-white:88 !hover:text-white': inverted }"
       @click="appStore.toggleSiderCollapse"
     />

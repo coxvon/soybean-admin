@@ -56,7 +56,7 @@ export const useRouteStore = defineStore(SetupStoreId.Route, () => {
   const constantRoutes = shallowRef<ElegantConstRoute[]>([]);
 
   function addConstantRoutes(routes: ElegantConstRoute[]) {
-    const constantRoutesMap = new Map(constantRoutes.value.map(route => [route.name, route]));
+    const constantRoutesMap = new Map<string, ElegantConstRoute>([]);
 
     routes.forEach(route => {
       constantRoutesMap.set(route.name, route);
@@ -69,7 +69,7 @@ export const useRouteStore = defineStore(SetupStoreId.Route, () => {
   const authRoutes = shallowRef<ElegantConstRoute[]>([]);
 
   function addAuthRoutes(routes: ElegantConstRoute[]) {
-    const authRoutesMap = new Map(authRoutes.value.map(route => [route.name, route]));
+    const authRoutesMap = new Map<string, ElegantConstRoute>([]);
 
     routes.forEach(route => {
       authRoutesMap.set(route.name, route);
@@ -332,15 +332,31 @@ export const useRouteStore = defineStore(SetupStoreId.Route, () => {
   }
 
   /**
-   * Get selected menu meta by key
+   * Get route meta by key
    *
-   * @param selectedKey Selected menu key
+   * @param key Route key
    */
-  function getSelectedMenuMetaByKey(selectedKey: string) {
-    // The routes in router.options.routes are static, you need to use router.getRoutes() to get all the routes.
+  function getRouteMetaByKey(key: string) {
     const allRoutes = router.getRoutes();
 
-    return allRoutes.find(route => route.name === selectedKey)?.meta || null;
+    return allRoutes.find(route => route.name === key)?.meta || null;
+  }
+
+  /**
+   * Get route query of meta by key
+   *
+   * @param key
+   */
+  function getRouteQueryOfMetaByKey(key: string) {
+    const meta = getRouteMetaByKey(key);
+
+    const query: Record<string, string> = {};
+
+    meta?.query?.forEach(item => {
+      query[item.key] = item.value;
+    });
+
+    return query;
   }
 
   return {
@@ -360,6 +376,6 @@ export const useRouteStore = defineStore(SetupStoreId.Route, () => {
     setIsInitAuthRoute,
     getIsAuthRouteExist,
     getSelectedMenuKeyPath,
-    getSelectedMenuMetaByKey
+    getRouteQueryOfMetaByKey
   };
 });
