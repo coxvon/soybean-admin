@@ -97,13 +97,19 @@ export const useRouteStore = defineStore(SetupStoreId.Route, () => {
   /** Cache routes */
   const cacheRoutes = ref<RouteKey[]>([]);
 
+  /** All cache routes */
+  const allCacheRoutes = shallowRef<RouteKey[]>([]);
+
   /**
    * Get cache routes
    *
    * @param routes Vue routes
    */
   function getCacheRoutes(routes: RouteRecordRaw[]) {
-    cacheRoutes.value = getCacheRouteNames(routes);
+    const alls = getCacheRouteNames(routes);
+
+    cacheRoutes.value = alls;
+    allCacheRoutes.value = [...alls];
   }
 
   /**
@@ -131,11 +137,22 @@ export const useRouteStore = defineStore(SetupStoreId.Route, () => {
   }
 
   /**
+   * Is cached route
+   *
+   * @param routeKey
+   */
+  function isCachedRoute(routeKey: RouteKey) {
+    return allCacheRoutes.value.includes(routeKey);
+  }
+
+  /**
    * Re cache routes by route key
    *
    * @param routeKey
    */
   async function reCacheRoutesByKey(routeKey: RouteKey) {
+    if (!isCachedRoute(routeKey)) return;
+
     removeCacheRoutes(routeKey);
 
     await appStore.reloadPage();
@@ -179,15 +196,18 @@ export const useRouteStore = defineStore(SetupStoreId.Route, () => {
   async function initConstantRoute() {
     if (isInitConstantRoute.value) return;
 
-    if (authRouteMode.value === 'static') {
-      const staticRoute = createStaticRoutes();
+    const staticRoute = createStaticRoutes();
 
+    if (authRouteMode.value === 'static') {
       addConstantRoutes(staticRoute.constantRoutes);
     } else {
       const { data, error } = await fetchGetConstantRoutes();
 
       if (!error) {
         addConstantRoutes(data);
+      } else {
+        // if fetch constant routes failed, use static constant routes
+        addConstantRoutes(staticRoute.constantRoutes);
       }
     }
 
@@ -240,6 +260,9 @@ export const useRouteStore = defineStore(SetupStoreId.Route, () => {
       handleUpdateRootRouteRedirect(home);
 
       setIsInitAuthRoute(true);
+    } else {
+      // if fetch user routes failed, reset store
+      authStore.resetStore();
     }
   }
 
