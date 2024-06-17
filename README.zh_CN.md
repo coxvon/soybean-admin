@@ -1,7 +1,7 @@
 <div align="center">
 	<img src="./public/favicon.svg" width="160" />
 	<h1>SoybeanAdmin</h1>
-  <span><a href="./README.zh_CN.md">English</a> | 中文</span>
+  <span><a href="./README.md">English</a> | 中文</span>
 </div>
 
 ---
@@ -10,6 +10,8 @@
 [![github stars](https://img.shields.io/github/stars/honghuangdc/soybean-admin)](https://github.com/soybeanjs/soybean-admin)
 [![github forks](https://img.shields.io/github/forks/honghuangdc/soybean-admin)](https://github.com/soybeanjs/soybean-admin)
 [![gitee stars](https://gitee.com/honghuangdc/soybean-admin/badge/star.svg)](https://gitee.com/honghuangdc/soybean-admin)
+
+<a href="https://hellogithub.com/repository/1298f27d5fe54959a16cf9686516ddb3" target="_blank"><img src="https://abroad.hellogithub.com/v1/widgets/recommend.svg?rid=1298f27d5fe54959a16cf9686516ddb3&claim_uid=IiDXWmP4TEntjbV" alt="Featured｜HelloGitHub" style="width: 250px; height: 54px;" width="250" height="54" /></a>
 
 > [!NOTE]
 > 如果您觉得 `SoybeanAdmin`对您有所帮助，或者您喜欢我们的项目，请在 GitHub 上给我们一个 ⭐️。您的支持是我们持续改进和增加新功能的动力！感谢您的支持！
@@ -77,8 +79,8 @@
 确保你的环境满足以下要求：
 
 - **git**: 你需要git来克隆和管理项目版本。
-- **NodeJS**: >=18.0.0，推荐 18.19.0 或更高。
-- **pnpm**: >= 8.0.0，推荐 8.14.0 或更高。
+- **NodeJS**: >=18.12.0，推荐 18.19.0 或更高。
+- **pnpm**: >= 8.7.0，推荐 8.14.0 或更高。
 
 **克隆项目**
 
@@ -157,7 +159,7 @@ pnpm build
   </div>
 	<!-- <div>
 		<p>微信群</p>
-		<img src="https://soybeanjs-1300612522.cos.ap-guangzhou.myqcloud.com/uPic/wechat-0402.jpg" style="width:200px" />
+		<img src="https://soybeanjs-1300612522.cos.ap-guangzhou.myqcloud.com/picgo/soybean-admin-wechat-0620.jpg" style="width:200px" />
 	</div> -->
 	<div>
 		<p>添加下面微信邀请进微信群</p>
